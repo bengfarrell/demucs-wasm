@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demucs Wasm Demo</title>
+</head>
+
+<style>
+    body {
+        padding: 2.5rem;
+    }
+    input {
+        display: none;
+    }
+</style>
+<body>
+    <input id="file-input" type="file" />
+    <button id="load-file" disabled>Load file</button>
+
+    <br /><br />
+    <label for="progress">Demucs progress:</label>
+    <progress id="progress" value="0" max="100"></progress>
+
+    <script type="module">
+        import { Demucs } from './index.js';
+
+        const demucs = new Demucs("demucs-free-4s");
+        demucs.addEventListener('ready', () => {
+            console.log("Demucs is ready");
+            document.getElementById('load-file').disabled = false;
+        });
+
+        demucs.addEventListener('progress', (e) => {
+            document.getElementById('progress').innerText = (e.progress * 100) + '%';
+            document.getElementById('progress').value = (e.progress * 100);
+        });
+
+        demucs.addEventListener('complete', (e) => {
+            console.log("****** Demucs complete", e);
+            playAudio(e.audio[0].left, e.audio[0].right, e.audio[0].left.length);
+        });
+
+        document.getElementById('file-input').addEventListener('change', async e => {
+            const file = e.target.files[0];
+            if (file) {
+                demucs.process(file);
+                document.getElementById('load-file').disabled = true;
+            }
+        });
+
+        document.getElementById('load-file').addEventListener('click', e => {
+            document.getElementById('file-input').click();
+        });
+
+        const playAudio = (left, right, len) => {
+            const audioCtx = new AudioContext();
+            const source = audioCtx.createBufferSource();
+            source.buffer = audioCtx.createBuffer(2, len, 44100);
+            source.buffer.copyToChannel(left, 0);
+            source.buffer.copyToChannel(right, 1);
+            source.connect(audioCtx.destination);
+            source.start();
+        };
+    </script>
+</body>
+</html>

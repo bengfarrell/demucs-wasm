@@ -1,3 +1,11 @@
+demucs.js
+demucs.js.map
+eventemitter.js
+eventemitter.js.map
+index.js
+index.js.map
+package-lock.json
+
 # Logs
 logs
 *.log
