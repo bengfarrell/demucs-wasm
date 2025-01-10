@@ -1,10 +1,19 @@
+
 demucs.js
 demucs.js.map
+demucs.d.ts
+demucs.d.ts.map
 eventemitter.js
 eventemitter.js.map
+eventemitter.d.ts
+eventemitter.d.ts.map
 index.js
 index.js.map
+index.d.ts
+index.d.ts.map
 package-lock.json
+
+.npmrc
 
 # Logs
 logs

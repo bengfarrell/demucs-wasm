@@ -12,7 +12,12 @@
     "format": "prettier \\\\\\\"**/*.{cjs,html,js,json,md,ts}\\\\\\\" --write",
     "serve": "npm run build:watch & wds --watch --open=demo.html"
   },
-  "files": [],
+  "files": [
+    "index.*",
+    "eventemitter.*",
+    "demucs.*",
+    "models/*"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/bengfarrell/demucs-wasm.git"
