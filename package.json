@@ -1,6 +1,6 @@
 {
   "name": "demucs-wasm",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "type": "module",
   "main": "index.js",
@@ -15,7 +15,10 @@
   "files": [
     "index.*",
     "eventemitter.*",
-    "demucs.*"
+    "demucs.*",
+    "worker.js",
+    "demucs_onnx_simd.js",
+    "demucs_onnx_simd.wasm"
   ],
   "repository": {
     "type": "git",
