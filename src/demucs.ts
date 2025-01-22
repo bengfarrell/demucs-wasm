@@ -23,6 +23,7 @@ export class CompleteEvent extends Event {
 export const Models = {
     FourStems: '4-stems',
     SixStems: '6-stems',
+    Karaoke: 'karaoke',
 }
 
 export class Demucs extends EventEmitter {
@@ -112,6 +113,7 @@ export class Demucs extends EventEmitter {
                 break;
 
             case "demucs-karaoke":
+            case Models.Karaoke:
                 dls.push("htdemucs_2s_cust.ort.gzipped");
                 break;
 
@@ -137,15 +139,22 @@ export class Demucs extends EventEmitter {
                 throw new Error("Failed to fetch " + dl);
             }));
         });
-        console.log('Fetching model files', fetches);
         return Promise.all(fetches);
     }
 
+    // TODO: Let's not segment for now and see how it goes
+    // according to https://github.com/facebookresearch/demucs, segmenting
+    // is done for GPU memory purposes, but I don't think this solution even uses the
+    // lets find out....
     protected processAudioSegments(left: Float32Array, right: Float32Array) {
+        this.worker.postMessage({ msg: "PROCESS_AUDIO", leftChannel: left, rightChannel: right, originalLength: left.length });
+    }
+
+    /*protected processAudioSegments(left: Float32Array, right: Float32Array) {
         this.segmentWaveform(left, right, Demucs.NUM_CHANNELS).forEach((e, _t) => {
            this.worker.postMessage({ msg: "PROCESS_AUDIO", leftChannel: e[0], rightChannel: e[1], originalLength: left.length });
         });
-    }
+    }*/
 
     protected segmentWaveform(left: Float32Array, right: Float32Array, channelCount: number) {
         const s = left.length, d = Math.ceil(s / channelCount), l = [];

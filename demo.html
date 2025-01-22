@@ -59,6 +59,7 @@
             source.buffer.copyToChannel(left, 0);
             source.buffer.copyToChannel(right, 1);
             source.connect(audioCtx.destination);
+            console.log("Playing audio", source.buffer.duration);
             source.start();
         };
     </script>
