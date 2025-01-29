@@ -22,9 +22,10 @@
     <progress id="progress" value="0" max="100"></progress>
 
     <script type="module">
-        import { Demucs } from './index.js';
+        import { Demucs, Models } from './index.js';
 
-        const demucs = new Demucs("demucs-free-4s");
+        const demucs = new Demucs(Models.Vocals, './worker.js', './models/');
+        //const demucs = new Demucs("demucs-free-4s");
         demucs.addEventListener('ready', () => {
             console.log("Demucs is ready");
             document.getElementById('load-file').disabled = false;
@@ -37,7 +38,7 @@
 
         demucs.addEventListener('complete', (e) => {
             console.log("****** Demucs complete", e);
-            playAudio(e.audio[0].left, e.audio[0].right, e.audio[0].left.length);
+            playAudio(e.audio[1].left, e.audio[1].right, e.audio[1].left.length);
         });
 
         document.getElementById('file-input').addEventListener('change', async e => {

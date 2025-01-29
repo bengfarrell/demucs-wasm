@@ -24,6 +24,9 @@ export const Models = {
     FourStems: '4-stems',
     SixStems: '6-stems',
     Karaoke: 'karaoke',
+    Bass: 'bass',
+    Drums: 'drums',
+    Vocals: 'vocals'
 }
 
 export class Demucs extends EventEmitter {
@@ -32,12 +35,14 @@ export class Demucs extends EventEmitter {
     protected static OVERLAP_SAMPLES = Math.floor(Demucs.SAMPLE_RATE * Demucs.OVERLAP_S);
     protected static NUM_CHANNELS = 2;
 
-    static PREFIX = '.';
     protected worker: Worker;
 
-    constructor(selectedModel: string) {
+    protected modelPath: string = ''
+
+    constructor(selectedModel: string, workerURI: string, modelPath: string) {
         super();
-        this.worker = new Worker(`${Demucs.PREFIX}/worker.js`);
+        this.modelPath = modelPath;
+        this.worker = new Worker(workerURI);
         this.worker.onmessage = (e) => {
             switch (e.data.msg) {
                 case 'WASM_READY':
@@ -117,6 +122,22 @@ export class Demucs extends EventEmitter {
                 dls.push("htdemucs_2s_cust.ort.gzipped");
                 break;
 
+            case Models.Bass:
+                dls.push("htdemucs_ft_bass.ort.gzipped");
+                break;
+
+            case Models.Drums:
+                dls.push("htdemucs_ft_drums.ort.gzipped");
+                break;
+
+            case Models.Drums:
+                dls.push("htdemucs_ft_drums.ort.gzipped");
+                break;
+
+            case Models.Vocals:
+                dls.push("htdemucs_ft_vocals.ort.gzipped");
+                break;
+
             case "demucs-pro-ft":
                 dls.push("htdemucs_ft_drums.ort.gzipped", "htdemucs_ft_bass.ort.gzipped", "htdemucs_ft_other.ort.gzipped", "htdemucs_ft_vocals.ort.gzipped");
                 break;
@@ -132,7 +153,7 @@ export class Demucs extends EventEmitter {
 
         const fetches: Promise<ArrayBuffer>[] = [];
         dls.map((dl) => {
-            fetches.push(fetch(Demucs.PREFIX + '/models/' + dl).then((res) => {
+            fetches.push(fetch(this.modelPath + dl).then((res) => {
                 if (res.ok) {
                     return res.arrayBuffer();
                 }

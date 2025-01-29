@@ -8,6 +8,14 @@ function loadWASMModule() {
 }
 function getNumModelsFromModelName() {
     let e = 0;
+
+    switch (modelName) {
+        case 'bass':
+        case 'drums':
+        case 'vocals':
+            return 1;
+    }
+
     return (
         "demucs-free-4s" === modelName || "demucs-free-6s" === modelName || "demucs-karaoke" === modelName
             ? (e = 1)
@@ -93,7 +101,7 @@ onmessage = async function (m) {
             d.push(p);
         }
         let e;
-        "demucs-karaoke" === modelName || "demucs-free-4s" === modelName || "demucs-free-6s" === modelName || "demucs-pro-cust" === modelName
+        "demucs-karaoke" === modelName || "demucs-free-4s" === modelName || "demucs-free-6s" === modelName || "demucs-pro-cust" === modelName || "bass" === modelName || "drums" === modelName || "vocals" === modelName
             ? (e = d[0])
             : "demucs-pro-ft" === modelName
                 ? (e = [d[0][0], d[0][1], d[1][2], d[1][3], d[2][4], d[2][5], d[3][6], d[3][7]])
